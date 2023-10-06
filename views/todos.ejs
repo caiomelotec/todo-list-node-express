@@ -129,7 +129,7 @@
             e.preventDefault();
           });
           rightBox.addEventListener("drop", (e) => {
-            rightBox.append(selected);
+            rightBox.appendChild(selected);
             selected = null;
           });
           // left side
@@ -137,7 +137,7 @@
             e.preventDefault();
           });
           leftBox.addEventListener("drop", (e) => {
-            leftBox.append(selected);
+            leftBox.appendChild(selected);
             selected = null;
           });
         });
