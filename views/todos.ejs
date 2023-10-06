@@ -25,7 +25,7 @@
           placeholder="Todo name"
         />
 
-        <label for="start">Start date:</label>
+        <label for="dateInput">Start date:</label>
         <input
           type="datetime-local"
           id="dateInput"
@@ -47,7 +47,7 @@
           placeholder="Edit Todo name"
         />
 
-        <label for="start">New Start date:</label>
+        <label for="dateInput">New Start date:</label>
         <input
           type="datetime-local"
           id="dateInput"
@@ -129,7 +129,7 @@
             e.preventDefault();
           });
           rightBox.addEventListener("drop", (e) => {
-            rightBox.appendChild(selected);
+            rightBox.append(selected);
             selected = null;
           });
           // left side
@@ -137,7 +137,7 @@
             e.preventDefault();
           });
           leftBox.addEventListener("drop", (e) => {
-            leftBox.appendChild(selected);
+            leftBox.append(selected);
             selected = null;
           });
         });
