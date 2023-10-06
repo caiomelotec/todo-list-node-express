@@ -15,7 +15,8 @@
     ></script>
   </head>
   <body>
-    <form action="/add-todos" method="POST">
+    <!-- ADD -->
+    <form action="/add-todos" method="POST" id="addTodoForm">
       <input
         type="text"
         name="todoName"
@@ -25,26 +26,76 @@
 
       <label for="start">Start date:</label>
       <input
-        type="date"
+        type="datetime-local"
         id="dateInput"
         name="dateInput"
-        min="2023-10-01"
+        min="2023-10-06T00:00"
         required
       />
 
       <button>Submit</button>
     </form>
+    <!-- EDIT -->
+
+    <form method="POST" id="editForm">
+      <input
+        type="text"
+        name="todoName"
+        id="todoName"
+        placeholder="Edit Todo name"
+      />
+
+      <label for="start">New Start date:</label>
+      <input
+        type="datetime-local"
+        id="dateInput"
+        name="dateInput"
+        min="2023-10-06T00:00"
+        required
+      />
+      <button type="submit">Submit</button>
+    </form>
+
     <div class="todo-container">
       <% todos.forEach((todo) => { %>
       <div class="todo-item">
         <h3><%- todo.title %></h3>
-        <h3><%- todo.date %></h3>
-        <button class="delete-btn"><ion-icon name="close"></ion-icon></button>
-        <button class="edit-btn">
+        <h4><%- todo.date %></h4>
+        <form action="/delete/todos" method="POST">
+          <input type="hidden" value="<%- todo.id %>" name="id" />
+          <button class="delete-btn"><ion-icon name="close"></ion-icon></button>
+        </form>
+        <button
+          class="edit-btn"
+          onclick="toggleEditForm('<%- todo.id %>', '<%- todo.title %>', '<%- todo.date %>')"
+        >
           <ion-icon name="create-outline"></ion-icon>
         </button>
       </div>
       <% }); %>
     </div>
+    <script>
+      let toggle = false;
+      const editForm = document.getElementById("editForm");
+      const addTodoForm = document.getElementById("addTodoForm");
+
+      function toggleEditForm(id, title, date) {
+        toggle = !toggle;
+        if (toggle) {
+          editForm.style.display = "block"; // Show the form
+          addTodoForm.style.display = "none";
+          // Populate the edit form fields with the todo's data
+          document.querySelector("#todoName").value = title;
+          document.querySelector("#dateInput").value = date;
+          // Set the form action to the edit route with the todo ID
+          editForm.action = `/edit-todos/${id}`;
+        } else {
+          editForm.style.display = "none"; // Hide the form
+          addTodoForm.style.display = "block";
+        }
+      }
+      // Initially, set the form to be hidden
+      editForm.style.display = "none";
+    </script>
   </body>
 </html>
