@@ -8,6 +8,16 @@ const filePath = path.join(
   "todos.json"
 );
 
+const getTodosFromFile = (cb) => {
+  fs.readFile(filePath, (err, fileContent) => {
+    if (err) {
+      cb(err, []); // Pass the error as the first argument
+    } else {
+      cb(JSON.parse(fileContent)); // Pass null as the first argument to indicate no error
+    }
+  });
+};
+
 module.exports = class Todos {
   constructor(title, date) {
     this.title = title;
@@ -32,12 +42,47 @@ module.exports = class Todos {
   }
 
   static fetchAllTodos(cb) {
-    fs.readFile(filePath, (err, fileContent) => {
-      if (err) {
-        cb(err, []); // Pass the error as the first argument
-      } else {
-        cb(JSON.parse(fileContent)); // Pass null as the first argument to indicate no error
-      }
+    getTodosFromFile(cb);
+  }
+
+  static deleteTodoById(id) {
+    getTodosFromFile((todos) => {
+      let updatedTodos = todos.filter((todo) => {
+        return todo.id !== id;
+      });
+      fs.writeFile(filePath, JSON.stringify(updatedTodos), (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    });
+  }
+
+  static findById(id, cb) {
+    getTodosFromFile((todos) => {
+      let todo = todos.find((todo) => todo.id === id);
+      cb(todo);
+    });
+  }
+
+  static updateTodo(id, updatedTitle, updatedDate, cb) {
+    getTodosFromFile((todos) => {
+      const updatedTodos = todos.map((todo) => {
+        if (todo.id == id) {
+          todo.title = updatedTitle;
+          todo.date = updatedDate;
+        }
+        return todo;
+      });
+
+      fs.writeFile8(filePath, JSON.stringify(updatedTodos), (err) => {
+        if (err) {
+          console.error(err);
+          cb(err);
+        } else {
+          cb(null); // No error, callback with success
+        }
+      });
     });
   }
 };
