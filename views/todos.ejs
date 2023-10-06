@@ -16,64 +16,82 @@
   </head>
   <body>
     <!-- ADD -->
-    <form action="/add-todos" method="POST" id="addTodoForm">
-      <input
-        type="text"
-        name="todoName"
-        id="todoName"
-        placeholder="Todo name"
-      />
+    <div class="form-container">
+      <form action="/add-todos" method="POST" id="addTodoForm">
+        <input
+          type="text"
+          name="todoName"
+          id="todoName"
+          placeholder="Todo name"
+        />
 
-      <label for="start">Start date:</label>
-      <input
-        type="datetime-local"
-        id="dateInput"
-        name="dateInput"
-        min="2023-10-06T00:00"
-        required
-      />
+        <label for="start">Start date:</label>
+        <input
+          type="datetime-local"
+          id="dateInput"
+          name="dateInput"
+          min="2023-10-06T00:00"
+          required
+        />
 
-      <button>Submit</button>
-    </form>
-    <!-- EDIT -->
+        <button class="submit-btn">Submit</button>
+      </form>
 
-    <form method="POST" id="editForm">
-      <input
-        type="text"
-        name="todoName"
-        id="todoName"
-        placeholder="Edit Todo name"
-      />
+      <!-- EDIT -->
 
-      <label for="start">New Start date:</label>
-      <input
-        type="datetime-local"
-        id="dateInput"
-        name="dateInput"
-        min="2023-10-06T00:00"
-        required
-      />
-      <button type="submit">Submit</button>
-    </form>
+      <form method="POST" id="editForm">
+        <input
+          type="text"
+          name="todoName"
+          id="todoName"
+          placeholder="Edit Todo name"
+        />
 
-    <div class="todo-container">
-      <% todos.forEach((todo) => { %>
-      <div class="todo-item">
-        <h3><%- todo.title %></h3>
-        <h4><%- todo.date %></h4>
-        <form action="/delete/todos" method="POST">
-          <input type="hidden" value="<%- todo.id %>" name="id" />
-          <button class="delete-btn"><ion-icon name="close"></ion-icon></button>
-        </form>
-        <button
-          class="edit-btn"
-          onclick="toggleEditForm('<%- todo.id %>', '<%- todo.title %>', '<%- todo.date %>')"
-        >
-          <ion-icon name="create-outline"></ion-icon>
-        </button>
-      </div>
-      <% }); %>
+        <label for="start">New Start date:</label>
+        <input
+          type="datetime-local"
+          id="dateInput"
+          name="dateInput"
+          min="2023-10-06T00:00"
+          required
+        />
+        <button type="submit" class="submit-btn">Edit</button>
+      </form>
     </div>
+    <!-- Todo List -->
+    <div class="container-wrapper">
+      <div class="todo-container" id="left">
+        <% todos.forEach((todo) => { %>
+        <div class="todo-item" draggable="true">
+          <h3><%- todo.title %></h3>
+          <h4><%- todo.date %></h4>
+          <form action="/delete/todos" method="POST">
+            <input type="hidden" value="<%- todo.id %>" name="id" />
+            <button class="delete-btn">
+              <ion-icon name="close"></ion-icon>
+            </button>
+          </form>
+          <button
+            class="edit-btn"
+            onclick="toggleEditForm('<%- todo.id %>', '<%- todo.title %>', '<%- todo.date %>')"
+          >
+            <ion-icon name="create-outline"></ion-icon>
+          </button>
+        </div>
+        <% }); %>
+        <div class="progress-left">
+          <h1>For to do:</h1>
+          <span>⏳</span>
+        </div>
+      </div>
+      <div class="todo-container" id="right">
+        <div class="progress">
+          <h1>Done</h1>
+          <span>✔</span>
+        </div>
+      </div>
+    </div>
+    <!-- Toggle form from add to update -->
     <script>
       let toggle = false;
       const editForm = document.getElementById("editForm");
@@ -96,6 +114,34 @@
       }
       // Initially, set the form to be hidden
       editForm.style.display = "none";
+    </script>
+    <!-- DRAG AND DROP -->
+    <script>
+      let lists = document.getElementsByClassName("todo-item");
+      let rightBox = document.getElementById("right");
+      let leftBox = document.getElementById("left");
+
+      for (list of lists) {
+        list.addEventListener("dragstart", (e) => {
+          let selected = e.target;
+
+          rightBox.addEventListener("dragover", (e) => {
+            e.preventDefault();
+          });
+          rightBox.addEventListener("drop", (e) => {
+            rightBox.appendChild(selected);
+            selected = null;
+          });
+          // left side
+          leftBox.addEventListener("dragover", (e) => {
+            e.preventDefault();
+          });
+          leftBox.addEventListener("drop", (e) => {
+            leftBox.appendChild(selected);
+            selected = null;
+          });
+        });
+      }
     </script>
   </body>
 </html>
