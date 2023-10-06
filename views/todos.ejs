@@ -129,16 +129,14 @@
             e.preventDefault();
           });
           rightBox.addEventListener("drop", (e) => {
-            rightBox.appendChild(selected);
-            selected = null;
+            rightBox.append(selected);
           });
           // left side
           leftBox.addEventListener("dragover", (e) => {
             e.preventDefault();
           });
           leftBox.addEventListener("drop", (e) => {
-            leftBox.appendChild(selected);
-            selected = null;
+            leftBox.append(selected);
           });
         });
       }
