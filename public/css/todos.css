@@ -13,10 +13,18 @@ body {
   align-items: center;
   flex-direction: column;
 }
+.container-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
 .todo-container {
-  background: rgb(216, 216, 216);
+  background: #0b0423;
   width: 35%;
   padding: 10px;
+  min-height: 50vh;
 }
 .todo-item {
   display: grid;
@@ -24,9 +32,11 @@ body {
   align-items: center;
   gap: 0.6rem;
   padding: 10px;
-  background-color: rgb(172, 172, 172);
+  background-color: white;
+  border-radius: 12px;
   border: 2px solid rgb(73, 72, 72);
   margin-bottom: 6px;
+  cursor: grab;
 }
 .edit-btn,
 .delete-btn {
@@ -46,4 +56,68 @@ body {
 }
 .edit-btn {
   background-color: rgb(58, 58, 213);
+}
+
+.form-container {
+  padding: 20px;
+  margin: 20px 0;
+  border: solid 1px rgb(173, 173, 173);
+}
+#dateInput,
+#todoName {
+  width: 250px;
+  padding: 7px;
+  margin-right: 0.2rem;
+  border-radius: 5px;
+}
+#dateInput {
+  width: 150px;
+}
+
+.submit-btn {
+  border: none;
+  background-color: rgb(8, 193, 20);
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 10px 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-left: 1rem;
+  transition: 0.2s;
+}
+
+.submit-btn:hover {
+  background-color: rgb(3, 127, 12);
+  transform: scale(1.05);
+}
+
+#left,
+#right {
+  position: relative;
+  margin-top: 2rem;
+}
+
+.progress {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: -2.4rem;
+  right: 0;
+}
+
+.progress-left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: -2.4rem;
+  left: 0;
+}
+.progress-left span,
+.progress span {
+  color: green;
+  font-size: 1.6em;
+  margin-left: 0.2em;
 }
