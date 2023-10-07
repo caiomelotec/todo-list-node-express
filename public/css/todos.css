@@ -119,8 +119,23 @@ body {
 .progress span {
   color: green;
   font-size: 1.6em;
-  margin-left: 0.2em;
+  margin-left: 0.3em;
 }
 .done {
   background-color: greenyellow;
+}
+@keyframes rotateAnimation {
+  0% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(195deg);
+  }
+  100% {
+    transform: rotate(-5deg);
+  }
+}
+
+.progress-left span {
+  animation: rotateAnimation 5s linear infinite;
 }
