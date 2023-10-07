@@ -62,7 +62,7 @@
     <div class="container-wrapper">
       <div class="todo-container" id="left">
         <% todos.forEach((todo) => { %>
-        <div class="todo-item" draggable="true">
+        <div class="todo-item" draggable="true" data-todo-id="<%- todo.id %>">
           <h3><%- todo.title %></h3>
           <h4><%- todo.date %></h4>
           <form action="/delete/todos" method="POST">
@@ -117,6 +117,49 @@
     </script>
     <!-- DRAG AND DROP -->
     <script>
+      // Function to store todo state in localStorage
+      function storeTodoState(todoId, state) {
+        const storedState = localStorage.getItem("todoStates") || "{}";
+        const todoStates = JSON.parse(storedState);
+        todoStates[todoId] = state;
+        localStorage.setItem("todoStates", JSON.stringify(todoStates));
+      }
+
+      // Function to load and apply todo states on page load
+      function loadTodoStates() {
+        const storedState = localStorage.getItem("todoStates");
+        if (storedState) {
+          const todoStates = JSON.parse(storedState);
+          const todoItems = document.getElementsByClassName("todo-item");
+
+          for (const todoId in todoStates) {
+            const state = todoStates[todoId];
+            const todoItem = document.querySelector(
+              `[data-todo-id="${todoId}"]`
+            );
+
+            if (todoItem) {
+              if (state === "done") {
+                // Move "Done" todos to the right container
+                const rightBox = document.getElementById("right");
+                rightBox.appendChild(todoItem);
+                todoItem.classList.add("done");
+              } else {
+                // Move "Not Done" todos to the left container
+                const leftBox = document.getElementById("left");
+                leftBox.appendChild(todoItem);
+                todoItem.classList.remove("done");
+              }
+            }
+          }
+        }
+      }
+
+      // Event listener for when the document is fully loaded
+      document.addEventListener("DOMContentLoaded", () => {
+        loadTodoStates();
+      });
+
       let lists = document.getElementsByClassName("todo-item");
       let rightBox = document.getElementById("right");
       let leftBox = document.getElementById("left");
@@ -124,19 +167,30 @@
       for (list of lists) {
         list.addEventListener("dragstart", (e) => {
           let selected = e.target;
+          let todoId = selected.getAttribute("data-todo-id");
 
           rightBox.addEventListener("dragover", (e) => {
             e.preventDefault();
           });
+
           rightBox.addEventListener("drop", (e) => {
-            rightBox.append(selected);
+            e.preventDefault();
+            rightBox.appendChild(selected);
+            selected.classList.add("done");
+            storeTodoState(todoId, "done");
+            selected = null;
           });
-          // left side
+
           leftBox.addEventListener("dragover", (e) => {
             e.preventDefault();
           });
+
           leftBox.addEventListener("drop", (e) => {
-            leftBox.append(selected);
+            e.preventDefault();
+            leftBox.appendChild(selected);
+            selected.classList.remove("done");
+            storeTodoState(todoId, "not-done");
+            selected = null;
           });
         });
       }
