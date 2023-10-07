@@ -75,7 +75,7 @@ module.exports = class Todos {
         return todo;
       });
 
-      fs.writeFile8(filePath, JSON.stringify(updatedTodos), (err) => {
+      fs.writeFile(filePath, JSON.stringify(updatedTodos), (err) => {
         if (err) {
           console.error(err);
           cb(err);
