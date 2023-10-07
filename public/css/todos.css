@@ -121,3 +121,6 @@ body {
   font-size: 1.6em;
   margin-left: 0.2em;
 }
+.done {
+  background-color: greenyellow;
+}
