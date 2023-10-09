@@ -1,7 +1,7 @@
-const Todos = require("../models/todos");
+const Todo = require("../models/todos");
 
 exports.getTodos = (req, res) => {
-  Todos.fetchAllTodos((todos) => {
+  Todo.findAll().then((todos) => {
     res.render("todos", {
       docTitle: "Todo List",
       path: "/todos",
