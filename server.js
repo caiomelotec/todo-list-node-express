@@ -3,14 +3,15 @@ const path = require("path");
 const app = express();
 const port = 3000;
 const bodyParser = require("body-parser");
-const cors = require("cors");
+
 //EJS
 app.set("view engine", "ejs");
 app.set("views", "views");
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
-
+//DB
+const sequelize = require("./util/database");
 // acess to the public folder
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -18,16 +19,10 @@ app.use(express.static(path.join(__dirname, "public")));
 const todosRouter = require("./routes/todos");
 app.use(todosRouter);
 
-app.use(
-  cors({
-    origin: "http://127.0.0.1:5173",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true,
-    optionsSuccessStatus: 204,
+sequelize
+  .sync()
+  .then(() => {
+    app.listen(port);
   })
-);
-
+  .catch((err) => console.log(err));
 //listening
-app.listen(port, () => {
-  console.log(`running on port: ${port}`);
-});
