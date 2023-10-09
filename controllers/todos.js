@@ -37,18 +37,14 @@ exports.editTodo = (req, res) => {
   const updatedTitle = req.body.todoName;
   const updatedDate = req.body.dateInput;
 
-  Todos.updateTodo(
-    todoId,
-    updatedTitle,
-    updatedDate.replace("T", " Time: "),
-    (err) => {
-      if (err) {
-        // Handle the error, return a 500 internal server error
-        res.status(500).json({ err: "Failed to edit todo." });
-      } else {
-        //if success redirect to home
-        res.redirect("/");
-      }
-    }
-  );
+  Todo.findByPk(todoId)
+    .then((todo) => {
+      todo.title = updatedTitle;
+      todo.date = updatedDate.replace("T", " Time: ");
+      return todo.save();
+    })
+    .then(() => {
+      res.redirect("/");
+    })
+    .catch((err) => console.log("Failed to edit todo", err));
 };
