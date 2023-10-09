@@ -10,7 +10,7 @@ const Todo = sequelize.define("todo", {
     allowNull: false,
   },
   title: Sequelize.STRING,
-  date: Sequelize.DATE,
+  date: Sequelize.STRING,
 });
 
 module.exports = Todo;
