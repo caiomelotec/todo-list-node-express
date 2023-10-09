@@ -13,15 +13,23 @@ exports.getTodos = (req, res) => {
 exports.postWriteTodos = (req, res) => {
   const todoTitle = req.body.todoName;
   const date = req.body.dateInput;
-  const todo = new Todos(todoTitle, date.replace("T", " Time: "));
-  todo.writeTodos();
-  res.redirect("/");
+  // const todo = new Todos(todoTitle, date.replace("T", " Time: "));
+  Todo.create({ title: todoTitle, date: date.replace("T", " Time: ") })
+    .then(() => {
+      res.redirect("/");
+    })
+    .catch((err) => console.log(err));
+  // todo.writeTodos();
+  // res.redirect("/");
 };
 
 exports.postDeleteTodo = (req, res) => {
   const todoId = req.body.id;
-  Todos.deleteTodoById(todoId);
-  res.redirect("/");
+  Todo.destroy({ where: { id: todoId } })
+    .then(() => {
+      res.redirect("/");
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.editTodo = (req, res) => {
